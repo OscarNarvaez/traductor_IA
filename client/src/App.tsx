@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 
-import { analyze, translate } from './api'
+import { analyze, translate, type Analysis } from './api'
 import { AnalysisPanel } from './components/AnalysisPanel'
 
 function App() {
@@ -14,18 +14,16 @@ function App() {
   const [userTranslationDirty, setUserTranslationDirty] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [result, setResult] = useState<any | null>(null)
+  const [result, setResult] = useState<Analysis | null>(null)
   const [swapCount, setSwapCount] = useState(0)
   const [resultVersion, setResultVersion] = useState(0)
 
+  const getErrorMessage = (value: unknown, fallback: string) =>
+    value instanceof Error ? value.message : fallback
+
   // Auto-translate on typing (debounced) when user hasn't overridden translation manually
   useEffect(() => {
-    if (!original.trim()) {
-      setTranslation('')
-      setResult(null)
-      setAutoError(null)
-      return
-    }
+    if (!original.trim()) return
     if (userTranslationDirty) return
 
     const handle = setTimeout(async () => {
@@ -34,8 +32,8 @@ function App() {
         setAutoError(null)
         const text = await translate({ text: original, fromLang, toLang })
         setTranslation(text)
-      } catch (e: any) {
-        setAutoError(e?.message || 'No se pudo traducir en tiempo real')
+      } catch (error: unknown) {
+        setAutoError(getErrorMessage(error, 'No se pudo traducir en tiempo real'))
       } finally {
         setAutoTranslating(false)
       }
@@ -57,8 +55,8 @@ function App() {
         setTranslation(data.translationCorrection || data.translation || '')
       }
       setUserTranslationDirty(false)
-    } catch (e: any) {
-      setError(e?.message || 'Error inesperado')
+    } catch (error: unknown) {
+      setError(getErrorMessage(error, 'Error inesperado'))
     } finally {
       setLoading(false)
     }
@@ -110,7 +108,17 @@ function App() {
             className="textarea"
             placeholder={placeholders[fromLang]}
             value={original}
-            onChange={(e) => setOriginal(e.target.value)}
+            onChange={(e) => {
+              const nextOriginal = e.target.value
+              setOriginal(nextOriginal)
+
+              if (!nextOriginal.trim()) {
+                setTranslation('')
+                setResult(null)
+                setAutoError(null)
+                setUserTranslationDirty(false)
+              }
+            }}
           />
         </section>
 
