@@ -14,6 +14,7 @@
   --accent-hover-bg: rgba(79, 107, 246, 0.1);
   --accent-shadow: rgba(79, 107, 246, 0.5);
   --accent-shadow-hover: rgba(79, 107, 246, 0.6);
+  --accent-tag-bg: rgba(79, 107, 246, 0.18);
 
   --text-primary: #e8ecf5;
   --text-secondary: #8b96ab;
