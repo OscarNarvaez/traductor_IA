@@ -45,7 +45,7 @@
 
 .pane:focus-within {
   border-color: var(--surface-border-hover);
-  box-shadow: 0 0 0 3px rgba(79, 107, 246, 0.15), 0 8px 24px -12px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 0 3px var(--accent-glow), 0 8px 24px -12px rgba(0, 0, 0, 0.5);
 }
 
 .pane-left {
@@ -91,7 +91,7 @@
 
 .swap:hover {
   border-color: var(--surface-border-hover);
-  background: rgba(79, 107, 246, 0.1);
+  background: var(--accent-hover-bg);
 }
 
 .swap-icon {
@@ -143,13 +143,13 @@
   border-radius: 10px;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 6px 16px -6px rgba(79, 107, 246, 0.5);
+  box-shadow: 0 6px 16px -6px var(--accent-shadow);
   transition: transform 180ms ease, box-shadow 180ms ease;
 }
 
 .btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 10px 22px -6px rgba(79, 107, 246, 0.6);
+  box-shadow: 0 10px 22px -6px var(--accent-shadow-hover);
 }
 
 .btn:disabled {

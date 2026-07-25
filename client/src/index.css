@@ -10,6 +10,10 @@
   --accent: #4f6bf6;
   --accent-light: #8ba3ff;
   --accent-strong: #3a54e0;
+  --accent-glow: rgba(79, 107, 246, 0.15);
+  --accent-hover-bg: rgba(79, 107, 246, 0.1);
+  --accent-shadow: rgba(79, 107, 246, 0.5);
+  --accent-shadow-hover: rgba(79, 107, 246, 0.6);
 
   --text-primary: #e8ecf5;
   --text-secondary: #8b96ab;
