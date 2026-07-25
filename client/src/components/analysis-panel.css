@@ -1,10 +1,5 @@
 .panel {
-    background: var(--surface);
     color: var(--text-primary);
-    border-radius: var(--radius-lg);
-    padding: 18px;
-    border: 1px solid var(--surface-border);
-    box-shadow: 0 8px 24px -12px rgba(0, 0, 0, 0.5);
 }
 
 .reveal {
@@ -48,7 +43,7 @@
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
     background: var(--bg-base);
     padding: 10px 12px;
-    border-radius: 8px;
+    border-radius: var(--radius-sm);
     border: 1px solid var(--surface-border);
 }
 
@@ -63,7 +58,7 @@
 .explanation {
     background: var(--bg-base);
     border: 1px solid var(--surface-border);
-    border-radius: 10px;
+    border-radius: var(--radius-md);
     padding: 12px;
     opacity: 0;
     animation: fadeSlideUp 420ms ease forwards;
@@ -104,11 +99,7 @@
 .tip {
     margin-top: 8px;
     padding: 8px 10px;
-    border-radius: 8px;
+    border-radius: var(--radius-sm);
     background: var(--success-bg);
     color: var(--success);
-}
-
-.muted {
-    color: var(--text-secondary);
 }

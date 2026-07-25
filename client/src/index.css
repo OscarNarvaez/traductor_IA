@@ -15,6 +15,8 @@
   --accent-shadow: rgba(79, 107, 246, 0.5);
   --accent-shadow-hover: rgba(79, 107, 246, 0.6);
   --accent-tag-bg: rgba(79, 107, 246, 0.18);
+  --accent-halo: rgba(79, 107, 246, 0.16);
+  --accent-light-halo: rgba(139, 163, 255, 0.08);
 
   --text-primary: #e8ecf5;
   --text-secondary: #8b96ab;
@@ -23,7 +25,11 @@
   --success-bg: rgba(134, 239, 172, 0.08);
   --error: #fca5a5;
 
+  --radius-sm: 8px;
+  --radius-md: 10px;
   --radius-lg: 14px;
+
+  --shadow-card: 0 8px 24px -12px rgba(0, 0, 0, 0.5);
 
   font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -48,8 +54,8 @@ body {
   margin: 0;
   min-height: 100vh;
   background:
-    radial-gradient(1200px 600px at 15% -10%, rgba(79, 107, 246, 0.16), transparent 60%),
-    radial-gradient(900px 500px at 100% 0%, rgba(139, 163, 255, 0.08), transparent 55%),
+    radial-gradient(1200px 600px at 15% -10%, var(--accent-halo), transparent 60%),
+    radial-gradient(900px 500px at 100% 0%, var(--accent-light-halo), transparent 55%),
     var(--bg-base-end);
 }
 
@@ -63,10 +69,35 @@ a:hover {
 }
 
 button {
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   border: 1px solid transparent;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
   cursor: pointer;
+}
+
+.muted {
+  color: var(--text-secondary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .explanation,
+  .reveal {
+    animation: none;
+    opacity: 1;
+  }
+  .spinner {
+    animation: none;
+    opacity: 0.7;
+  }
+  .error {
+    animation: none;
+  }
+  .swap-icon,
+  .pane,
+  .btn,
+  .textarea {
+    transition: none;
+  }
 }

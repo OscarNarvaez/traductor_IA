@@ -39,13 +39,13 @@
   border: 1px solid var(--surface-border);
   border-radius: var(--radius-lg);
   padding: 16px;
-  box-shadow: 0 8px 24px -12px rgba(0, 0, 0, 0.5);
+  box-shadow: var(--shadow-card);
   transition: border-color 200ms ease, box-shadow 200ms ease;
 }
 
 .pane:focus-within {
   border-color: var(--surface-border-hover);
-  box-shadow: 0 0 0 3px var(--accent-glow), 0 8px 24px -12px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 0 3px var(--accent-glow), var(--shadow-card);
 }
 
 .pane-left {
@@ -84,7 +84,7 @@
   border: 1px solid var(--surface-border);
   color: var(--text-primary);
   padding: 7px 12px;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   transition: background 200ms ease, border-color 200ms ease;
 }
@@ -106,7 +106,7 @@
   background: var(--bg-base);
   color: var(--text-primary);
   border: 1px solid var(--surface-border);
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   padding: 14px;
   line-height: 1.6;
   font-family: inherit;
@@ -123,10 +123,6 @@
   font-style: italic;
 }
 
-.muted {
-  color: var(--text-secondary);
-}
-
 .actions {
   display: flex;
   align-items: center;
@@ -140,7 +136,7 @@
   border: none;
   color: white;
   padding: 11px 18px;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   font-weight: 600;
   cursor: pointer;
   box-shadow: 0 6px 16px -6px var(--accent-shadow);
