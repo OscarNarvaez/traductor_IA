@@ -15,6 +15,8 @@ function App() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [result, setResult] = useState<any | null>(null)
+  const [swapCount, setSwapCount] = useState(0)
+  const [resultVersion, setResultVersion] = useState(0)
 
   // Auto-translate on typing (debounced) when user hasn't overridden translation manually
   useEffect(() => {
@@ -49,6 +51,7 @@ function App() {
     try {
       const data = await analyze({ originalText: original, userTranslation: translation || undefined, fromLang, toLang })
       setResult(data)
+      setResultVersion((v) => v + 1)
       // Mostrar una traducción solo si el usuario no ha escrito manualmente.
       if (!userTranslationDirty) {
         setTranslation(data.translationCorrection || data.translation || '')
@@ -62,6 +65,7 @@ function App() {
   }
 
   const swapLanguages = () => {
+    setSwapCount((c) => c + 1)
     setFromLang((prev) => {
       const newFrom = toLang
       setToLang(prev)
@@ -97,7 +101,8 @@ function App() {
           <div className="label-row">
             <label htmlFor="original" className="label">Texto original ({fromLabel})</label>
             <button className="swap" type="button" onClick={swapLanguages}>
-              ↔️ Intercambiar
+              <span className="swap-icon" style={{ transform: `rotate(${swapCount * 180}deg)` }}>↔️</span>
+              Intercambiar
             </button>
           </div>
           <textarea
@@ -124,17 +129,24 @@ function App() {
               setUserTranslationDirty(true)
             }}
           />
-          {autoError && <div className="error">{autoError}</div>}
+          {autoError && <div key={autoError} className="error">{autoError}</div>}
         </section>
 
         <section className="pane pane-bottom">
           <div className="actions">
             <button className="btn" onClick={onAnalyze} disabled={loading || !original.trim()}>
-              {loading ? 'Analizando…' : 'Analizar y corregir'}
+              {loading ? (
+                <>
+                  Analizando…
+                  <span className="spinner" />
+                </>
+              ) : (
+                'Analizar y corregir'
+              )}
             </button>
-            {error && <span className="error">{error}</span>}
+            {error && <span key={error} className="error">{error}</span>}
           </div>
-          <AnalysisPanel data={result || undefined} />
+          <AnalysisPanel key={resultVersion} data={result || undefined} />
         </section>
       </main>
     </div>

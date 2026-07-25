@@ -1,28 +1,50 @@
 .panel {
-    background: #0f172a;
-    color: #e2e8f0;
-    border-radius: 8px;
-    padding: 16px;
-    border: 1px solid #1f2937;
+    color: var(--text-primary);
+}
+
+.reveal {
+    display: grid;
+    animation: revealGrow 420ms ease forwards;
+}
+
+.reveal-inner {
+    overflow: hidden;
+    min-height: 0;
+}
+
+@keyframes revealGrow {
+    from {
+        grid-template-rows: 0fr;
+        opacity: 0;
+    }
+    to {
+        grid-template-rows: 1fr;
+        opacity: 1;
+    }
 }
 
 .block {
-    margin-bottom: 16px;
+    margin-bottom: 18px;
+}
+
+.block:last-child {
+    margin-bottom: 0;
 }
 
 .block h3 {
-    margin: 0 0 8px;
+    margin: 0 0 10px;
     font-size: 16px;
-    color: #93c5fd;
+    font-weight: 600;
+    color: var(--accent-light);
 }
 
 .mono {
     white-space: pre-wrap;
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
-    background: #0b1220;
-    padding: 8px;
-    border-radius: 6px;
-    border: 1px solid #1f2937;
+    background: var(--bg-base);
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--surface-border);
 }
 
 .explanations {
@@ -30,30 +52,44 @@
     margin: 0;
     padding: 0;
     display: grid;
-    gap: 10px;
+    gap: 12px;
 }
 
 .explanation {
-    background: #0b1220;
-    border: 1px solid #1f2937;
-    border-radius: 6px;
-    padding: 10px;
+    background: var(--bg-base);
+    border: 1px solid var(--surface-border);
+    border-radius: var(--radius-md);
+    padding: 12px;
+    opacity: 0;
+    animation: fadeSlideUp 420ms ease forwards;
+}
+
+@keyframes fadeSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .tag {
     display: inline-block;
-    background: #1e3a8a;
-    color: #bfdbfe;
+    background: var(--accent-tag-bg);
+    color: var(--accent-light);
     font-size: 12px;
-    padding: 2px 6px;
+    font-weight: 500;
+    padding: 3px 8px;
     border-radius: 999px;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
 }
 
 .pair {
     display: grid;
     gap: 4px;
-    margin-top: 6px;
+    margin-top: 8px;
 }
 
 .reason {
@@ -61,10 +97,9 @@
 }
 
 .tip {
-    margin-top: 6px;
-    color: #86efac;
-}
-
-.muted {
-    color: #94a3b8;
+    margin-top: 8px;
+    padding: 8px 10px;
+    border-radius: var(--radius-sm);
+    background: var(--success-bg);
+    color: var(--success);
 }

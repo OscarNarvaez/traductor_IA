@@ -30,3 +30,6 @@ Thumbs.db
 
 # Claude Code local worktrees/state
 .claude/
+
+# Superpowers scratch workspace
+.superpowers/
