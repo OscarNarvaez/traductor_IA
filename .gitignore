@@ -27,3 +27,6 @@ Thumbs.db
 # Editor
 .idea/
 .vscode/
+
+# Superpowers scratch workspace
+.superpowers/
