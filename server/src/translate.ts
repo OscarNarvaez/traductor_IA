@@ -1,15 +1,15 @@
-import { getOpenAI, OPENAI_MODEL } from './openai.js'
+import { getGroqClient, GROQ_MODEL } from './groq.js'
 import { translatePrompt } from './prompt.js'
 import type { TranslateRequest } from './types.js'
 
 export async function translateText(params: TranslateRequest): Promise<string> {
     const { text, fromLang, toLang } = params
-    const client = getOpenAI()
+    const client = getGroqClient()
 
     if (fromLang === toLang) return text
 
     const completion = await client.chat.completions.create({
-        model: process.env.OPENAI_MODEL || OPENAI_MODEL,
+        model: GROQ_MODEL,
         temperature: 0.2,
         response_format: { type: 'json_object' },
         messages: [

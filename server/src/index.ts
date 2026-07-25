@@ -31,8 +31,8 @@ app.get('/health', (_req, res) => {
 app.post('/api/translate', async (req, res) => {
     try {
         const parsed = TranslateBodySchema.parse(req.body)
-        if (!process.env.OPENAI_API_KEY) {
-            return res.status(500).json({ error: 'OPENAI_API_KEY no configurada en el servidor.' })
+        if (!process.env.GROQ_API_KEY) {
+            return res.status(500).json({ error: 'GROQ_API_KEY no configurada en el servidor.' })
         }
         const translation = await translateText(parsed)
         res.json({ translation })
@@ -48,8 +48,8 @@ app.post('/api/analyze', async (req, res) => {
     try {
         const parsed = AnalyzeBodySchema.parse(req.body)
 
-        if (!process.env.OPENAI_API_KEY) {
-            return res.status(500).json({ error: 'OPENAI_API_KEY no configurada en el servidor.' })
+        if (!process.env.GROQ_API_KEY) {
+            return res.status(500).json({ error: 'GROQ_API_KEY no configurada en el servidor.' })
         }
 
         const data = await analyzeText({

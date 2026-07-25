@@ -4,24 +4,25 @@ Aplicación web educativa enfocada en traducir, corregir y explicar textos de ma
 
 ## Requisitos
 - Node.js >= 18
-- Clave de OpenAI (`OPENAI_API_KEY`)
+- pnpm
+- Clave de Groq (`GROQ_API_KEY`) — https://console.groq.com
 
 ## Configuración rápida
 1. Copia `.env.example` a `.env` en el raíz y coloca tu clave:
 ```
-OPENAI_API_KEY=sk-... 
+GROQ_API_KEY=gsk_...
+GROQ_MODEL=llama-3.1-8b-instant
 SERVER_PORT=3000
 CORS_ORIGIN=http://localhost:5173
-OPENAI_MODEL=gpt-4o-mini
 ```
 2. Instala dependencias:
 ```bash
-npm install
+pnpm install
 ```
 3. (Primera vez) Genera el cliente con Vite si aún no existe (lo hará el setup inicial).
 4. Ejecuta en desarrollo (servidor + cliente):
 ```bash
-npm run dev
+pnpm dev
 ```
 
 - Frontend: http://localhost:5173
@@ -33,7 +34,7 @@ Funciones clave
 - Panel inferior con corrección del texto original, corrección de traducción y explicaciones didácticas en español.
 
 ## Arquitectura
-- Monorepo npm workspaces: `server` (Express + OpenAI) y `client` (Vite + React + TS).
+- Monorepo pnpm workspaces: `server` (Express + Groq, vía SDK de OpenAI apuntando a `api.groq.com`) y `client` (Vite + React + TS).
 - El backend expone `POST /api/analyze` que devuelve JSON estructurado con:
   - `translation`
   - `originalCorrection`
@@ -42,12 +43,12 @@ Funciones clave
   - `languageLevel`
 
 ## Seguridad
-- La clave de OpenAI va solo en el backend (.env). No la expongas en el cliente.
+- La clave de Groq va solo en el backend (.env). No la expongas en el cliente.
 - CORS restringido a `http://localhost:5173` por defecto.
 - Rate limiting habilitado para evitar abuso.
 
 ## Personalización
-- Cambia el modelo en `.env` (`OPENAI_MODEL`).
+- Cambia el modelo en `.env` (`GROQ_MODEL`).
 - Ajusta CORS en `.env` (`CORS_ORIGIN`).
 
 ## Roadmap

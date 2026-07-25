@@ -1,4 +1,4 @@
-import { getOpenAI, OPENAI_MODEL } from './openai.js'
+import { getGroqClient, GROQ_MODEL } from './groq.js'
 import { AnalysisSchema, type Analysis } from './schema.js'
 import { systemPrompt } from './prompt.js'
 
@@ -13,9 +13,9 @@ export async function analyzeText(params: { originalText: string; userTranslatio
     }
 
     // Use JSON mode via chat.completions for strict JSON output
-    const client = getOpenAI()
+    const client = getGroqClient()
     const completion = await client.chat.completions.create({
-        model: process.env.OPENAI_MODEL || OPENAI_MODEL,
+        model: GROQ_MODEL,
         temperature: 0.2,
         response_format: { type: 'json_object' },
         messages: [
