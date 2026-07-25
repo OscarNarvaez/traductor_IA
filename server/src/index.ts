@@ -12,6 +12,7 @@ const app = express()
 const PORT = Number(process.env.SERVER_PORT || 3000)
 const ORIGIN = process.env.CORS_ORIGIN || 'http://localhost:5173'
 
+app.use(cors({ origin: ORIGIN }))
 app.use(express.json({ limit: '1mb' }))
 app.use(morgan('dev'))
 
