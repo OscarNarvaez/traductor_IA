@@ -27,3 +27,6 @@ Thumbs.db
 # Editor
 .idea/
 .vscode/
+
+# Claude Code local worktrees/state
+.claude/
