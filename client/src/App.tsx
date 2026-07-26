@@ -54,7 +54,7 @@ function App() {
     setLoading(true)
     setResult(null)
     try {
-      const data = await analyze({ originalText: original, fromLang, toLang })
+      const data = await analyze({ originalText: original, fromLang })
       setResult(data)
       setResultVersion((v) => v + 1)
     } catch (error: unknown) {

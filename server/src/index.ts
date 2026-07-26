@@ -54,8 +54,7 @@ app.post('/api/analyze', async (req, res) => {
 
         const data = await analyzeText({
             originalText: parsed.originalText.trim(),
-            fromLang: parsed.fromLang,
-            toLang: parsed.toLang
+            fromLang: parsed.fromLang
         })
 
         res.json(data)

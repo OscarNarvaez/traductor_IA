@@ -2,10 +2,16 @@ import { getGroqClient, GROQ_MODEL } from './groq.js'
 import { AnalysisSchema, type Analysis } from './schema.js'
 import { systemPrompt } from './prompt.js'
 
-export async function analyzeText(params: { originalText: string; fromLang?: 'es' | 'en'; toLang?: 'es' | 'en' }): Promise<Analysis> {
-    const { originalText, fromLang = 'es', toLang = 'en' } = params
+// El código de 2 letras "en" colisiona con la preposición española "en" cuando
+// se interpola en un prompt escrito en español (p. ej. "SIEMPRE en en."), lo que
+// confunde al modelo y lo hace ignorar la instrucción de idioma. Usar el nombre
+// completo evita la ambigüedad.
+const LANGUAGE_NAMES: Record<'es' | 'en', string> = { es: 'español', en: 'inglés' }
 
-    const userPayload = { originalText, fromLang, toLang }
+export async function analyzeText(params: { originalText: string; fromLang?: 'es' | 'en' }): Promise<Analysis> {
+    const { originalText, fromLang = 'es' } = params
+
+    const userPayload = { originalText, fromLang }
 
     // Use JSON mode via chat.completions for strict JSON output
     const client = getGroqClient()
@@ -14,7 +20,7 @@ export async function analyzeText(params: { originalText: string; fromLang?: 'es
         temperature: 0.2,
         response_format: { type: 'json_object' },
         messages: [
-            { role: 'system', content: systemPrompt.replace('{fromLang}', fromLang).replace('{toLang}', toLang) },
+            { role: 'system', content: systemPrompt.replaceAll('{fromLang}', LANGUAGE_NAMES[fromLang]) },
             { role: 'user', content: JSON.stringify(userPayload) }
         ]
     })

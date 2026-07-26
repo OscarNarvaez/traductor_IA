@@ -7,7 +7,7 @@ export type Analysis = {
 
 const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:3000'
 
-export async function analyze(payload: { originalText: string; fromLang: 'es' | 'en'; toLang: 'es' | 'en' }): Promise<Analysis> {
+export async function analyze(payload: { originalText: string; fromLang: 'es' | 'en' }): Promise<Analysis> {
     const res = await fetch(`${API_BASE}/api/analyze`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
