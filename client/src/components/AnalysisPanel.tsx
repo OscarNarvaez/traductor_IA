@@ -1,7 +1,15 @@
 import type { Analysis } from '../api'
 import './analysis-panel.css'
 
-export function AnalysisPanel({ data }: { data?: Analysis }) {
+export function AnalysisPanel({ data, notice }: { data?: Analysis; notice?: string }) {
+    if (notice) {
+        return (
+            <div className="panel">
+                <p className="muted">{notice}</p>
+            </div>
+        )
+    }
+
     if (!data) {
         return (
             <div className="panel">
@@ -15,41 +23,24 @@ export function AnalysisPanel({ data }: { data?: Analysis }) {
             <div className="reveal">
                 <div className="reveal-inner">
                     <div className="block">
-                        <h3>Corrección del texto original</h3>
-                        <p className="mono">{data.originalCorrection}</p>
+                        <h3>Así lo diría un nativo</h3>
+                        <ul className="alternatives">
+                            {data.nativeAlternatives.map((alt, i) => (
+                                <li
+                                    key={i}
+                                    className="alternative"
+                                    style={{ animationDelay: `${i * 60}ms` }}
+                                >
+                                    {alt}
+                                </li>
+                            ))}
+                        </ul>
                     </div>
 
-                    <div className="block">
-                        <h3>Explicaciones</h3>
-                        {data.explanations?.length ? (
-                            <ul className="explanations">
-                                {data.explanations.map((e, i) => (
-                                    <li
-                                        key={i}
-                                        className="explanation"
-                                        style={{ animationDelay: `${i * 60}ms` }}
-                                    >
-                                        {e.type && <span className="tag">{e.type}</span>}
-                                        <div className="reason">{e.reason}</div>
-                                        {(e.original || e.corrected) && (
-                                            <div className="pair">
-                                                {e.original && <div><strong>Tu versión:</strong> {e.original}</div>}
-                                                {e.corrected && <div><strong>Correcto:</strong> {e.corrected}</div>}
-                                            </div>
-                                        )}
-                                        {e.example && (
-                                            <div className="pair">
-                                                <div><strong>Ej. mal:</strong> {e.example.wrong}</div>
-                                                <div><strong>Ej. bien:</strong> {e.example.right}</div>
-                                            </div>
-                                        )}
-                                        {e.tip && <div className="tip">💡 {e.tip}</div>}
-                                    </li>
-                                ))}
-                            </ul>
-                        ) : (
-                            <p className="muted">Sin observaciones adicionales.</p>
-                        )}
+                    <div className={`block correction-block ${data.hasErrors ? 'has-errors' : 'no-errors'}`}>
+                        <h3>{data.hasErrors ? 'Corrección del texto original' : '¡Bien hecho!'}</h3>
+                        <p className="feedback">{data.feedback}</p>
+                        <p className="mono">{data.originalCorrection}</p>
                     </div>
                 </div>
             </div>

@@ -11,10 +11,10 @@ function App() {
   const [toLang, setToLang] = useState<'es' | 'en'>('en')
   const [autoTranslating, setAutoTranslating] = useState(false)
   const [autoError, setAutoError] = useState<string | null>(null)
-  const [userTranslationDirty, setUserTranslationDirty] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [result, setResult] = useState<Analysis | null>(null)
+  const [analyzeNotice, setAnalyzeNotice] = useState<string | null>(null)
   const [swapCount, setSwapCount] = useState(0)
   const [resultVersion, setResultVersion] = useState(0)
 
@@ -24,7 +24,6 @@ function App() {
   // Auto-translate on typing (debounced) when user hasn't overridden translation manually
   useEffect(() => {
     if (!original.trim()) return
-    if (userTranslationDirty) return
 
     const handle = setTimeout(async () => {
       try {
@@ -40,21 +39,24 @@ function App() {
     }, 500)
 
     return () => clearTimeout(handle)
-  }, [original, fromLang, toLang, userTranslationDirty])
+  }, [original, fromLang, toLang])
 
   const onAnalyze = async () => {
     setError(null)
+    const wordCount = original.trim().split(/\s+/).filter(Boolean).length
+    if (wordCount < 4) {
+      setResult(null)
+      setAnalyzeNotice('Esta función solo está disponible para frases de 4 palabras o más — así no gastamos peticiones de la API en textos muy cortos.')
+      setResultVersion((v) => v + 1)
+      return
+    }
+    setAnalyzeNotice(null)
     setLoading(true)
     setResult(null)
     try {
-      const data = await analyze({ originalText: original, userTranslation: translation || undefined, fromLang, toLang })
+      const data = await analyze({ originalText: original, fromLang, toLang })
       setResult(data)
       setResultVersion((v) => v + 1)
-      // Mostrar una traducción solo si el usuario no ha escrito manualmente.
-      if (!userTranslationDirty) {
-        setTranslation(data.translationCorrection || data.translation || '')
-      }
-      setUserTranslationDirty(false)
     } catch (error: unknown) {
       setError(getErrorMessage(error, 'Error inesperado'))
     } finally {
@@ -74,7 +76,7 @@ function App() {
         return newOriginal
       })
       setResult(null)
-      setUserTranslationDirty(false)
+      setAnalyzeNotice(null)
       return newFrom
     })
   }
@@ -115,8 +117,8 @@ function App() {
               if (!nextOriginal.trim()) {
                 setTranslation('')
                 setResult(null)
+                setAnalyzeNotice(null)
                 setAutoError(null)
-                setUserTranslationDirty(false)
               }
             }}
           />
@@ -124,18 +126,15 @@ function App() {
 
         <section className="pane pane-right">
           <div className="label-row">
-            <label htmlFor="translation" className="label">Traducción {toLabel} (editable)</label>
+            <label htmlFor="translation" className="label">Traducción {toLabel}</label>
             {autoTranslating && <span className="muted">Traduciendo…</span>}
           </div>
           <textarea
             id="translation"
             className="textarea"
-            placeholder={`Aquí aparecerá la traducción ${toLabel}. Puedes editarla si quieres.`}
+            placeholder={`Aquí aparecerá la traducción ${toLabel} automáticamente.`}
             value={translation}
-            onChange={(e) => {
-              setTranslation(e.target.value)
-              setUserTranslationDirty(true)
-            }}
+            readOnly
           />
           {autoError && <div key={autoError} className="error">{autoError}</div>}
         </section>
@@ -154,7 +153,7 @@ function App() {
             </button>
             {error && <span key={error} className="error">{error}</span>}
           </div>
-          <AnalysisPanel key={resultVersion} data={result || undefined} />
+          <AnalysisPanel key={resultVersion} data={result || undefined} notice={analyzeNotice || undefined} />
         </section>
       </main>
     </div>

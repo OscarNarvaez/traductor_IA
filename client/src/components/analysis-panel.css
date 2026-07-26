@@ -47,7 +47,7 @@
     border: 1px solid var(--surface-border);
 }
 
-.explanations {
+.alternatives {
     list-style: none;
     margin: 0;
     padding: 0;
@@ -55,7 +55,7 @@
     gap: 12px;
 }
 
-.explanation {
+.alternative {
     background: var(--bg-base);
     border: 1px solid var(--surface-border);
     border-radius: var(--radius-md);
@@ -75,31 +75,20 @@
     }
 }
 
-.tag {
-    display: inline-block;
-    background: var(--accent-tag-bg);
-    color: var(--accent-light);
-    font-size: 12px;
-    font-weight: 500;
-    padding: 3px 8px;
-    border-radius: 999px;
-    margin-bottom: 8px;
+.feedback {
+    margin: 0 0 10px;
+    color: var(--text-secondary);
 }
 
-.pair {
-    display: grid;
-    gap: 4px;
-    margin-top: 8px;
-}
-
-.reason {
-    margin-top: 4px;
-}
-
-.tip {
-    margin-top: 8px;
-    padding: 8px 10px;
-    border-radius: var(--radius-sm);
-    background: var(--success-bg);
+.correction-block.no-errors h3 {
     color: var(--success);
+}
+
+.correction-block.no-errors .feedback {
+    color: var(--success);
+}
+
+.correction-block.no-errors .mono {
+    border-color: var(--success);
+    background: var(--success-bg);
 }

@@ -4,7 +4,6 @@ const LangEnum = z.enum(['es', 'en'])
 
 export const AnalyzeBodySchema = z.object({
     originalText: z.string().min(1, 'El texto original no puede estar vacío').max(2000, 'Texto demasiado largo (máx 2000 caracteres)'),
-    userTranslation: z.string().max(2000).optional(),
     fromLang: LangEnum.default('es'),
     toLang: LangEnum.default('en')
 }).refine((v) => v.fromLang !== v.toLang, { message: 'Los idiomas no pueden ser iguales', path: ['toLang'] })

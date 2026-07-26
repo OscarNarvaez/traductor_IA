@@ -2,15 +2,10 @@ import { getGroqClient, GROQ_MODEL } from './groq.js'
 import { AnalysisSchema, type Analysis } from './schema.js'
 import { systemPrompt } from './prompt.js'
 
-export async function analyzeText(params: { originalText: string; userTranslation?: string; fromLang?: 'es' | 'en'; toLang?: 'es' | 'en' }): Promise<Analysis> {
-    const { originalText, userTranslation, fromLang = 'es', toLang = 'en' } = params
+export async function analyzeText(params: { originalText: string; fromLang?: 'es' | 'en'; toLang?: 'es' | 'en' }): Promise<Analysis> {
+    const { originalText, fromLang = 'es', toLang = 'en' } = params
 
-    const userPayload = {
-        originalText,
-        userTranslation: userTranslation ?? null,
-        fromLang,
-        toLang
-    }
+    const userPayload = { originalText, fromLang, toLang }
 
     // Use JSON mode via chat.completions for strict JSON output
     const client = getGroqClient()
@@ -28,22 +23,14 @@ export async function analyzeText(params: { originalText: string; userTranslatio
 
     let parsed: unknown
     try {
-        parsed = JSON.parse(content)
+        parsed = normalizeParsed(JSON.parse(content), originalText)
     } catch (e) {
         // Fallback minimal structure if parsing fails
         parsed = {
-            translation: '',
-            originalCorrection: '',
-            translationCorrection: userTranslation || '',
-            languageLevel: 'B1',
-            explanations: [
-                {
-                    type: 'usage',
-                    original: '',
-                    corrected: '',
-                    reason: 'No se pudo parsear la respuesta de la IA. Intenta nuevamente.'
-                }
-            ]
+            nativeAlternatives: ['', ''],
+            originalCorrection: originalText,
+            feedback: 'No se pudo generar el análisis. Intenta nuevamente.',
+            hasErrors: false
         }
     }
 
@@ -55,10 +42,27 @@ export async function analyzeText(params: { originalText: string; userTranslatio
             details: firstError
         })
     }
-    const data = result.data
-    // Asegurar que translationCorrection refleje translation cuando el modelo no la devuelva explícita.
-    if (!data.translationCorrection) {
-        data.translationCorrection = data.translation
+    return result.data
+}
+
+// Corrige inconsistencias menores del modelo antes de validar con zod estricto:
+// - nativeAlternatives debe tener EXACTAMENTE 2 strings (el tuple de zod rechaza cualquier otra longitud).
+// - hasErrors debe ser boolean; si el modelo lo omite, se infiere comparando originalCorrection con el texto original.
+function normalizeParsed(raw: unknown, originalText: string): unknown {
+    if (!raw || typeof raw !== 'object') return raw
+    const obj = raw as Record<string, unknown>
+
+    let alts = Array.isArray(obj.nativeAlternatives)
+        ? obj.nativeAlternatives.filter((x): x is string => typeof x === 'string')
+        : []
+    if (alts.length > 2) alts = alts.slice(0, 2)
+    while (alts.length < 2) alts.push(alts[0] ?? '')
+    obj.nativeAlternatives = alts
+
+    if (typeof obj.hasErrors !== 'boolean') {
+        const corrected = typeof obj.originalCorrection === 'string' ? obj.originalCorrection.trim() : ''
+        obj.hasErrors = corrected !== '' && corrected !== originalText.trim()
     }
-    return data
+
+    return obj
 }

@@ -82,7 +82,7 @@ button {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .explanation,
+  .alternative,
   .reveal {
     animation: none;
     opacity: 1;
