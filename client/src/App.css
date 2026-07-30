@@ -202,6 +202,24 @@
   }
 }
 
+.footer {
+  margin-top: 32px;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.footer-link {
+  color: var(--accent-light);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 200ms ease;
+}
+
+.footer-link:hover {
+  color: var(--accent);
+}
+
 @media (max-width: 900px) {
   .grid {
     grid-template-columns: 1fr;

@@ -156,6 +156,20 @@ function App() {
           <AnalysisPanel key={resultVersion} data={result || undefined} notice={analyzeNotice || undefined} />
         </section>
       </main>
+
+      <footer className="footer">
+        <p>
+          Diseñado por{' '}
+          <a
+            href="https://www.linkedin.com/in/oscar-julian-narvaez-5b144120b/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="footer-link"
+          >
+            ZOKY
+          </a>
+        </p>
+      </footer>
     </div>
   )
 }
