@@ -3,7 +3,7 @@ services:
     name: traductor-ia-server
     runtime: node
     plan: free
-    buildCommand: corepack enable && corepack prepare pnpm@11.17.0 --activate && pnpm install --frozen-lockfile && pnpm --filter server build
+    buildCommand: pnpm install --frozen-lockfile && pnpm --filter server build
     startCommand: pnpm --filter server start
     envVars:
       - key: CORS_ORIGIN
