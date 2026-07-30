@@ -9,7 +9,7 @@ import 'dotenv/config'
 
 const app = express()
 
-const PORT = Number(process.env.SERVER_PORT || 3000)
+const PORT = Number(process.env.PORT || process.env.SERVER_PORT || 3000)
 const ORIGIN = process.env.CORS_ORIGIN || 'http://localhost:5173'
 
 app.use(cors({ origin: ORIGIN }))
